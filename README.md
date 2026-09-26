@@ -2,7 +2,7 @@
 
 Hand-built implementations of the ML and cognitive-modeling ideas I work with, one unit at a time.
 
-I research cognitive architectures and AI as a Vector Instutite scholar and a master's student in Cognitive Science at Carleton University (ANIMUS Lab). My research combines predictive processing, active inference and vector symbolic architectures, and I co-founded TLOL. In this repo I build the underlying tools and machinery myself, from an empty file, all hand-written.
+I research cognitive architectures and AI as a Vector Institute scholar and a master's student in Cognitive Science at Carleton University (ANIMUS Lab). My research combines predictive processing, active inference and vector symbolic architectures, and I co-founded TLOL. In this repo I build the underlying tools and machinery myself, from an empty file, all hand-written.
 
 ## How this repo works
 
