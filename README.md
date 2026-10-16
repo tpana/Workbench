@@ -31,7 +31,7 @@ What's next: a GPT from scratch that loads real GPT-2 weights, PPO on CartPole, 
 ## Credits
 
 - **01 micrograd** follows Andrej Karpathy's [micrograd](https://github.com/karpathy/micrograd) and his [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) lecture. The design is his, and the original is MIT-licensed.
-- **02 Gridworld** follows the "Active inference from scratch" notebook from [pymdp](https://github.com/infer-actively/pymdp). The Q-learning agent is written from the pseudocode in Section 6.5 of Sutton and Barto's [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book-2nd.html) (2nd ed.).
+- **02 Gridworld** follows the ["Active inference from scratch" notebook](https://github.com/infer-actively/pymdp/blob/v0.0.7.1/docs/notebooks/active_inference_from_scratch.ipynb) from [pymdp](https://github.com/infer-actively/pymdp). The Q-learning agent is written from the pseudocode in Section 6.5 of Sutton and Barto's [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book-2nd.html) (2nd ed.).
 
 ## Contact
 
