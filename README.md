@@ -24,7 +24,7 @@ Each unit folder has a short README covering what I built and the sources I foll
 | # | Unit | Tracks | Status |
 |---|---|---|---|
 | 01 | **micrograd**: a scalar autograd engine (`Value`, topological-sort `backward()`), then `Neuron`, `Layer` and `MLP` trained on a toy dataset | A | Done |
-| 02 | **Gridworld, two agents**: a discrete active inference agent in plain numpy (A, B, C, D arrays, belief updates, expected free energy as risk plus ambiguity), then tabular Q-learning on the same world, compared | B, C | In progress |
+| 02 | **Gridworld, two agents**: a discrete active inference agent in plain numpy (A, B, C, D arrays, belief updates, expected free energy as risk plus ambiguity), then tabular Q-learning on the same world, compared | B, C | Done |
 
 What's next: a GPT from scratch that loads real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
