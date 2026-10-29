@@ -28,7 +28,8 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 03 | **makemore 1, bigrams**: a character-level bigram language model over 32,033 names, first as a table of counts, then as a one-layer neural net trained by gradient descent to the same negative log-likelihood | A | Done |
 | 04 | **makemore 2, MLP**: the MLP language model of Bengio et al. (2003), with learned character embeddings, a tanh hidden layer, minibatch training, a learning-rate sweep and train/dev/test splits | A | Done |
 | 05 | **makemore 3, activations and BatchNorm**: diagnosing a deeper MLP's activations and gradients (initialization scale, tanh saturation, Kaiming init), adding batch normalization, and rewriting the network as PyTorch-style layers | A | In progress |
-| 06 | **makemore 4, backprop by hand**: manual backpropagation through the whole MLP (cross-entropy, linear layers, BatchNorm, tanh, embeddings), each gradient checked against PyTorch autograd, then training with no `loss.backward()` | A | Planned |
+| 06 | **makemore 4, backprop by hand**: manual backpropagation through every intermediate tensor of the MLP's forward pass, one line at a time (cross-entropy, linear layers, BatchNorm, tanh, embeddings), each gradient checked against PyTorch autograd | A | Planned |
+| 07 | **makemore 5, WaveNet**: the MLP rebuilt from `torch.nn`-style modules (`Embedding`, `FlattenConsecutive`, `Sequential`), its context widened from 3 to 8 characters and fused two at a time in a WaveNet-style tree, with BatchNorm fixed for (B, T, C) tensors | A | Planned |
 
 What's next: a GPT from scratch that loads real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
@@ -36,7 +37,7 @@ What's next: a GPT from scratch that loads real GPT-2 weights, PPO on CartPole, 
 
 - **01 micrograd** follows Andrej Karpathy's [micrograd](https://github.com/karpathy/micrograd) and his [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) lecture. The design is his, and the original is MIT-licensed.
 - **02 Gridworld** follows the ["Active inference from scratch" notebook](https://github.com/infer-actively/pymdp/blob/v0.0.7.1/docs/notebooks/active_inference_from_scratch.ipynb) from [pymdp](https://github.com/infer-actively/pymdp). The Q-learning agent is written from the pseudocode in Section 6.5 of Sutton and Barto's [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book-2nd.html) (2nd ed.).
-- **03–06 makemore** follows parts 1–4 of the makemore lectures in Andrej Karpathy's [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `names.txt` comes from his [makemore](https://github.com/karpathy/makemore) repo. The design is his, and the original is MIT-licensed.
+- **03–07 makemore** follows parts 1–5 of the makemore lectures in Andrej Karpathy's [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `names.txt` comes from his [makemore](https://github.com/karpathy/makemore) repo. The design is his, and the original is MIT-licensed.
 
 ## Contact
 
