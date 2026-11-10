@@ -8,9 +8,9 @@ import os
 # hyperparameters
 batch_size = 32 # how many independent sequences will we process in parallel?
 block_size = 8  # what is the maximum context length for predictions?
-max_iters = 3000
+max_iters = 5000
 eval_interval = 300
-learning_rate = 1e-2
+learning_rate = 1e-3
 device = 'cpu' #'mps' if torch.mps.is_available() else 'cpu'
 eval_iters = 200
 n_embd = 32
@@ -62,7 +62,40 @@ def estimate_loss():
     model.train()
     return out
 
-# super simple bigram model
+class Head(nn.Module):
+    """ one head of self-attention """
+
+    def __init__(self, head_size):
+        super().__init__()
+        self.key = nn.Linear(n_embd, head_size, bias=False)
+        self.query = nn.Linear(n_embd, head_size, bias=False)
+        self.value = nn.Linear(n_embd, head_size, bias=False)
+        self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
+        
+    def forward(self, x):
+        B,T,C = x.shape
+        k = self.key(x)   # (B,T,head_size)
+        q = self.query(x) # (B,T,head_size)
+        # compute attention scores "affinities"
+        wei = q @ k.transpose(-2,-1) * k.shape[-1]**-0.5 # (B, T, C) @ (B, C, T) -> (B, T, T)
+        wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf')) # (B, T, T)
+        wei = F.softmax(wei, dim=-1) # (B, T, T)
+        # perform the weighted aggregation of the values
+        v = self.value(x) # (B,T,head_size)
+        out = wei @ v # (B, T, T) @ (B, T, C) -> (B, T, C)
+        return out
+
+class MultiHeadAttention(nn.Module):
+    """ multiple heads of self-attention in parallel """
+    
+    def __init__(self, num_heads, head_size):
+        super().__init__()
+        self.heads = nn.ModuleList([Head(head_size) for _ in range(num_heads)])
+        
+    def forward(self, x):
+        return torch.cat([h(x) for h in self.heads], dim=-1)
+
+# super simple bigram model (not anymore)
 class BigramLanguageModel(nn.Module):
     
     def __init__(self):
@@ -70,6 +103,8 @@ class BigramLanguageModel(nn.Module):
         # each token directly reads off the logits for the next token from a lookup table
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
+        #self.sa_head = Head(n_embd)
+        self.sa_heads = MultiHeadAttention(4, n_embd//4) # ie. 4 heads of 8-dimensional self-attention
         self.lm_head = nn.Linear(n_embd, vocab_size)
         
     def forward(self, idx, targets=None):
@@ -79,6 +114,8 @@ class BigramLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # (B,T,C) - (Batch, Time, Channel)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (T,C) 
         x = tok_emb + pos_emb # (B,T,C) -- x holds not just token identities, but also the token positions within T
+        #x = self.sa_head(x) # apply one head of self-attention. (B,T,C)
+        x = self.sa_heads(x) # apply heads of self-attention. (B,T,C)
         logits = self.lm_head(x) # (B,T,vocab_size)
         
         if targets is None: 
@@ -95,8 +132,10 @@ class BigramLanguageModel(nn.Module):
     def generate(self, idx, max_new_tokens):
         # idx is (B, T) array of indices in the current context
         for _ in range(max_new_tokens):
+            # crop idx to the last block_size tokens
+            idx_cond = idx[:, -block_size:]
             # get the predictions
-            logits, loss = self(idx)
+            logits, loss = self(idx_cond)
             # focus only on the last step
             logits = logits[:, -1, :] # becomes (B, C)
             # apply softmax to get probabilities 
@@ -133,3 +172,46 @@ for iter in range(max_iters):
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
 print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
     
+    
+    
+# Single-head self-attention:
+""" 
+ARI
+HAThan, thivet'ly meirar ysuch, fo thest
+K
+CAV:
+HEDIERESTAD Pfr:
+BENENENLING CENNUCINA IO: yond houstoruloubleles, be sordweloe yot bed thed Ond Doue bou
+His, to I lllat;
+Kind yo Icad imoralceng, wpatsl my peer furs bust hasthe sor merals of ss whacer gaers, ver: biolllay seirost fat:
+Thones som, wer ran
+Toupls om?
+Sll: hy athithos benciet bs fof.
+Amathalcbenou liles caly, detave shpreearg
+Whe wad wolf sd it totosthe, wank th in thit shin
+S ht ande conit iul cert gpapam oun llkeavilint hmy r
+"""
+
+# Multi-head self-attention (4 heads):
+"""
+bachit yand thim his of intreysuch, fore wit
+KEd Ve;
+Anstend reardm: swhim whitl quelarsai thru.
+I'
+Thost thersblelts, be sornw-loe you bed'thed O.
+
+DOUST:
+Whe sefto I 
+That ten, my thald hougarcencus parslers peer furs bust hatth'ssor me gest.
+
+KASTh,
+Thegacps, var: bis
+Lupurs ifor in apter yes sont wer rand, sp.
+
+LOHASll, hady btthos bencies be for.
+ALIUCABCbe nos, you caly, detave shpr, mre
+Whe wad wolf slill tot sthe, wanivelfill
+KE be in
+Shes and on: I witlecept gor am ounkieke thrins hatne
+"""
+
