@@ -353,7 +353,17 @@ Hatith your in his do you fay; the his noter perthy
 Falt a in as thou
 """
 
-# With dropout and scaled up hyperparameters (loss ~, 5000 iters):
+# With dropout and scaled up hyperparameters (loss ~1.48, 5000 iters):
 """
-
+Be nor vengeanmences. How far means
+Do with great Aufidit dreams, why lost have
+But upon grief in clothes, that like boasted him,
+Ere met there o'er and her fortune fellow as Warwick's,
+When crowns comfort as to his well sleep mistakes,
+Each of me, as assave how dooming hours,
+SuspiciOns look up in soldiers, then in queen
+From fifty, to my pipose. I do sug,
+The place you hot remain the end, who haste writing to
+Cavizens of the clocket? Come I have dpy to find:
+The nuptial affairers; and so his h
 """
