@@ -6,14 +6,17 @@ from torch.nn import functional as F
 import os
 
 # hyperparameters
-batch_size = 32 # how many independent sequences will we process in parallel?
-block_size = 8  # what is the maximum context length for predictions?
+batch_size = 64 # how many independent sequences will we process in parallel?
+block_size = 256  # what is the maximum context length for predictions?
 max_iters = 5000
-eval_interval = 300
-learning_rate = 1e-3
-device = 'cpu' #'mps' if torch.mps.is_available() else 'cpu'
+eval_interval = 500
+learning_rate = 3e-4
+device = 'mps' if torch.mps.is_available() else 'cpu'
 eval_iters = 200
-n_embd = 32
+n_embd = 384
+n_head = 6
+n_layer = 6
+dropout = 0.2
 # -------------------------------------------------------
 
 torch.manual_seed(1337)
@@ -72,6 +75,8 @@ class Head(nn.Module):
         self.value = nn.Linear(n_embd, head_size, bias=False)
         self.register_buffer('tril', torch.tril(torch.ones(block_size, block_size)))
         
+        self.dropout = nn.Dropout(dropout)
+        
     def forward(self, x):
         B,T,C = x.shape
         k = self.key(x)   # (B,T,head_size)
@@ -80,6 +85,7 @@ class Head(nn.Module):
         wei = q @ k.transpose(-2,-1) * k.shape[-1]**-0.5 # (B, T, C) @ (B, C, T) -> (B, T, T)
         wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf')) # (B, T, T)
         wei = F.softmax(wei, dim=-1) # (B, T, T)
+        wei = self.dropout(wei)
         # perform the weighted aggregation of the values
         v = self.value(x) # (B,T,head_size)
         out = wei @ v # (B, T, T) @ (B, T, C) -> (B, T, C)
@@ -92,10 +98,12 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         self.heads = nn.ModuleList([Head(head_size) for _ in range(num_heads)])
         self.proj = nn.Linear(n_embd, n_embd)
+        self.dropout = nn.Dropout(dropout)
         
     def forward(self, x):
         out = torch.cat([h(x) for h in self.heads], dim=-1) # output of self-attention itself
-        out = self.proj(out)                                # linear projection, for residual
+        #out = self.proj(out)                                # linear projection, for residual
+        out = self.dropout(self.proj(out))
         return out
 
 class FeedForward(nn.Module):
@@ -107,6 +115,7 @@ class FeedForward(nn.Module):
             nn.Linear(n_embd, 4 * n_embd),
             nn.ReLU(),
             nn.Linear(4 * n_embd, n_embd), # projection layer going back into the residual pathway
+            nn.Dropout(dropout),
         )
         
         
@@ -123,10 +132,13 @@ class Block(nn.Module):
         head_size = n_embd // n_head
         self.sa = MultiHeadAttention(n_head, head_size) # communication
         self.ffwd = FeedForward(n_embd)                 # computation
-        
+        self.ln1 = nn.LayerNorm(n_embd)
+        self.ln2 = nn.LayerNorm(n_embd)
+
     def forward(self, x):
-        x = x + self.sa(x)   # fork off (x +) to residual, do some communication and come back
-        x = x + self.ffwd(x) # fork off, do some computation, come back
+        # note: layernorm applied before x goes into sa/ffwd
+        x = x + self.sa(self.ln1(x))   # fork off (x +) to residual, do some communication and come back
+        x = x + self.ffwd(self.ln2(x)) # fork off, do some computation, come back
         return x
 
 # super simple bigram model (not anymore)
@@ -137,14 +149,19 @@ class BigramLanguageModel(nn.Module):
         # each token directly reads off the logits for the next token from a lookup table
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
-        self.blocks = nn.Sequential(
-            Block(n_embd, n_head=4),
-            Block(n_embd, n_head=4),
-            Block(n_embd, n_head=4),
-        )
+        self.blocks = nn.Sequential(*[Block(n_embd, n_head=n_head) for _ in range(n_layer)])
+        
+        #self.blocks = nn.Sequential(
+        #    Block(n_embd, n_head=4),
+        #    Block(n_embd, n_head=4),
+        #    Block(n_embd, n_head=4),
+        #    nn.LayerNorm(n_embd),
+        #)
         #self.sa_head = Head(n_embd)
-        self.sa_heads = MultiHeadAttention(4, n_embd//4) # ie. 4 heads of 8-dimensional self-attention
-        self.ffwd = FeedForward(n_embd) # with feed-forward on token level
+        #self.sa_heads = MultiHeadAttention(4, n_embd//4) # ie. 4 heads of 8-dimensional self-attention
+        #self.ffwd = FeedForward(n_embd) # with feed-forward on token level
+        
+        self.ln_f = nn.LayerNorm(n_embd) # final layer norm
         self.lm_head = nn.Linear(n_embd, vocab_size)
         
     def forward(self, idx, targets=None):
@@ -160,6 +177,7 @@ class BigramLanguageModel(nn.Module):
         #x = self.ffwd(x) # # apply single feed-forward layer. (B,T,C)    --- allows tokens time to "think on" what they found from each other
         x = self.blocks(x) # apply transformer blocks (B,T,C)            --- allows interspersing of communication+computation
         
+        x = self.ln_f(x) # (B,T,vocab_size)                              --- apply layernorm
         logits = self.lm_head(x) # (B,T,vocab_size) -- decode
         
         if targets is None: 
@@ -314,7 +332,28 @@ CATIAFOL:
 A quares forsing the mo
 """
 
-# With layernorm (loss ~, 5000 iters):
+# With layernorm (loss ~2.07, 5000 iters):
+"""
+LUS:
+Cere are to mave many.
+
+GLOUCINTY YATA:
+Trruntiow O-sis way, from 'd on of the frue come?
+
+EDWARD Nomes is ands.
+Athope interceself not scepela's pronobliees wis reast the had noble that
+moldanges,
+And I the so that, Heave to fain's too me: him, ke proplacess than was, wick,
+Sit pulage again sike kencest winte.
+
+Pwith chath, betut waw the purs of name am ke, musch''d  yeto kess:
+Be, Bongery, not pos;
+This he dien theses,
+Hatith your in his do you fay; the his noter perthy
+Falt a in as thou
+"""
+
+# With dropout and scaled up hyperparameters (loss ~, 5000 iters):
 """
 
 """
