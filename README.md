@@ -30,7 +30,7 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 05 | **makemore 3, activations and BatchNorm**: diagnosing a deeper MLP's activations and gradients (initialization scale, tanh saturation, Kaiming init), adding batch normalization, and rewriting the network as PyTorch-style layers | A | Done |
 | 06 | **makemore 4, backprop by hand**: manual backpropagation through the MLP's cross-entropy loss and output layer, one intermediate tensor at a time from the loss back to the hidden activations, each gradient matching PyTorch autograd exactly | A | Done |
 | 07 | **makemore 5, WaveNet**: the MLP rebuilt from `torch.nn`-style modules (`Embedding`, `FlattenConsecutive`, `Sequential`), its context widened from 3 to 8 characters and fused two at a time in a WaveNet-style tree, with BatchNorm fixed for (B, T, C) tensors | A | Done |
-| 08 | **GPT from scratch**: a character-level, decoder-only Transformer trained on Tiny Shakespeare, built up from a bigram baseline through masked self-attention, multi-head attention, feed-forward layers, residual connections, LayerNorm and dropout | A | In progress |
+| 08 | **GPT from scratch**: a character-level, decoder-only Transformer trained on Tiny Shakespeare, built up from a bigram baseline through masked self-attention, multi-head attention, feed-forward layers, residual connections, LayerNorm and dropout | A | Done |
 
 What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
