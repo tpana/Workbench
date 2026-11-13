@@ -31,6 +31,7 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 06 | **makemore 4, backprop by hand**: manual backpropagation through the MLP's cross-entropy loss and output layer, one intermediate tensor at a time from the loss back to the hidden activations, each gradient matching PyTorch autograd exactly | A | Done |
 | 07 | **makemore 5, WaveNet**: the MLP rebuilt from `torch.nn`-style modules (`Embedding`, `FlattenConsecutive`, `Sequential`), its context widened from 3 to 8 characters and fused two at a time in a WaveNet-style tree, with BatchNorm fixed for (B, T, C) tensors | A | Done |
 | 08 | **GPT from scratch**: a character-level, decoder-only Transformer trained on Tiny Shakespeare, built up from a bigram baseline through masked self-attention, multi-head attention, feed-forward layers, residual connections, LayerNorm and dropout | A | Done |
+| 09 | **GPT tokenizer**: byte-level byte-pair encoding from scratch, trained on UTF-8 bytes with encode and decode, then GPT-2's regex pre-split and special tokens, checked against tiktoken's GPT-2 and GPT-4 tokenizers and compared with SentencePiece | A | In progress |
 
 What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
@@ -40,6 +41,7 @@ What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on Cart
 - **02 Gridworld** follows the ["Active inference from scratch" notebook](https://github.com/infer-actively/pymdp/blob/v0.0.7.1/docs/notebooks/active_inference_from_scratch.ipynb) from [pymdp](https://github.com/infer-actively/pymdp). The Q-learning agent is written from the pseudocode in Section 6.5 of Sutton and Barto's [*Reinforcement Learning: An Introduction*](http://incompleteideas.net/book/the-book-2nd.html) (2nd ed.).
 - **03–07 makemore** follows parts 1–5 of the makemore lectures in Andrej Karpathy's [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `names.txt` comes from his [makemore](https://github.com/karpathy/makemore) repo. The design is his, and the original is MIT-licensed.
 - **08 GPT from scratch** follows Andrej Karpathy's [Let's build GPT](https://www.youtube.com/watch?v=kCc8FmEb1nY) lecture in [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `input.txt` (Tiny Shakespeare) comes from his [char-rnn](https://github.com/karpathy/char-rnn) repo. The design is his.
+- **09 GPT tokenizer** follows Andrej Karpathy's [Let's build the GPT Tokenizer](https://www.youtube.com/watch?v=zduSFxRajkE) lecture in [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) and his [minbpe](https://github.com/karpathy/minbpe) repo. The design is his, and minbpe is MIT-licensed.
 
 ## Contact
 
