@@ -8,7 +8,7 @@ I research cognitive architectures and AI as a Vector Institute scholar and a ma
 
 Every line of code here was typed by hand. Some units follow a tutorial closely, and those are credited below and in the unit's own README. The goal is to build understanding and familiarity with tools in ML and cognitive modelling.
 
-Each unit folder has a short README covering what I built and the sources I followed. Units that follow one lecture series share a parent folder, like `makemore/`, with a README for the series.
+Each unit folder has a short README covering what I built and the sources I followed. Units that follow one lecture series or worksheet share a parent folder, like `makemore/` or `bayesian_learning/`, with a README for the series.
 
 ## Tracks
 
@@ -32,6 +32,9 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 07 | **makemore 5, WaveNet**: the MLP rebuilt from `torch.nn`-style modules (`Embedding`, `FlattenConsecutive`, `Sequential`), its context widened from 3 to 8 characters and fused two at a time in a WaveNet-style tree, with BatchNorm fixed for (B, T, C) tensors | A | Done |
 | 08 | **GPT from scratch**: a character-level, decoder-only Transformer trained on Tiny Shakespeare, built up from a bigram baseline through masked self-attention, multi-head attention, feed-forward layers, residual connections, LayerNorm and dropout | A | Done |
 | 09 | **GPT tokenizer**: byte-level byte-pair encoding from scratch, trained on UTF-8 bytes with encode and decode, then GPT-2's regex pre-split and special tokens, checked against tiktoken's GPT-2 and GPT-4 tokenizers and compared with SentencePiece | A | Parked |
+| 10 | **Bayesian linear regression**: linear basis function models with a Gaussian prior over the weights, their closed-form posterior and posterior predictive, fit with straight-line and Gaussian basis functions as data accumulates | C | In progress |
+| 11 | **Where to look, UCB**: choosing where to sample next by upper confidence bound, the posterior mean plus a multiple of its standard deviation, inside a Bayesian optimization loop that fits, picks the next point, samples it and refits | B, C | Planned |
+| 12 | **Forgetting**: steps 13–21 of the Bench worksheet | C | Planned |
 
 What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
@@ -42,6 +45,7 @@ What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on Cart
 - **03–07 makemore** follows parts 1–5 of the makemore lectures in Andrej Karpathy's [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `names.txt` comes from his [makemore](https://github.com/karpathy/makemore) repo. The design is his, and the original is MIT-licensed.
 - **08 GPT from scratch** follows Andrej Karpathy's [Let's build GPT](https://www.youtube.com/watch?v=kCc8FmEb1nY) lecture in [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html), and `input.txt` (Tiny Shakespeare) comes from his [char-rnn](https://github.com/karpathy/char-rnn) repo. The design is his.
 - **09 GPT tokenizer** follows Andrej Karpathy's [Let's build the GPT Tokenizer](https://www.youtube.com/watch?v=zduSFxRajkE) lecture in [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) and his [minbpe](https://github.com/karpathy/minbpe) repo. The design is his, and minbpe is MIT-licensed.
+- **10–12 Bayesian learning** follows Martin Krasser's [bayesian-machine-learning](https://github.com/krasserm/bayesian-machine-learning) notebooks on Bayesian linear regression and Bayesian optimization (Apache-2.0) and Apoorv Agnihotri and Nipun Batra's [*Exploring Bayesian Optimization*](https://distill.pub/2020/bayesian-optimization/) (Distill, 2020, CC BY 4.0), then my Bench worksheet for the steps past them.
 
 ## Contact
 
