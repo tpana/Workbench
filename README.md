@@ -32,9 +32,9 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 07 | **makemore 5, WaveNet**: the MLP rebuilt from `torch.nn`-style modules (`Embedding`, `FlattenConsecutive`, `Sequential`), its context widened from 3 to 8 characters and fused two at a time in a WaveNet-style tree, with BatchNorm fixed for (B, T, C) tensors | A | Done |
 | 08 | **GPT from scratch**: a character-level, decoder-only Transformer trained on Tiny Shakespeare, built up from a bigram baseline through masked self-attention, multi-head attention, feed-forward layers, residual connections, LayerNorm and dropout | A | Done |
 | 09 | **GPT tokenizer**: byte-level byte-pair encoding from scratch, trained on UTF-8 bytes with encode and decode, then GPT-2's regex pre-split and special tokens, checked against tiktoken's GPT-2 and GPT-4 tokenizers and compared with SentencePiece | A | Parked |
-| 10 | **Bayesian linear regression**: linear basis function models with a Gaussian prior over the weights, their closed-form posterior and posterior predictive, fit with straight-line and Gaussian basis functions as data accumulates | C | In progress |
-| 11 | **Where to look, UCB**: choosing where to sample next by upper confidence bound, the posterior mean plus a multiple of its standard deviation, inside a Bayesian optimization loop that fits, picks the next point, samples it and refits | B, C | Planned |
-| 12 | **Forgetting**: steps 13–21 of the Bench worksheet | C | Planned |
+| 10 | **Bayesian linear regression**: a posterior over the weights of 20 Gaussian basis features, built in one batch or one look at a time, as a map of a toy one-dimensional world: its mean, its uncertainty band, and a normalised surprise ε² that reads true noise over assumed noise | C | In progress |
+| 11 | **Where to look, UCB**: the unit 10 map choosing its next look where μ + κσ is largest, scored by how many of 30 looks land on the object, against random, raster, greedy and uncertainty-only search and across a sweep of κ | B, C | Planned |
+| 12 | **Forgetting**: exponential forgetting in the unit 10 map, decaying toward zero or toward the prior: γ as a memory of 1/(1 − γ) looks, how fast the map drops a bump that vanishes, and what forgetting costs when nothing changes | C | Planned |
 
 What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
