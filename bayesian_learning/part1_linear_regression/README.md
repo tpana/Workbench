@@ -4,4 +4,6 @@
 
 **Tutorial notebook:** [Bayesian regression with linear basis function models](https://github.com/krasserm/bayesian-machine-learning/blob/dev/bayesian-linear-regression/bayesian_linear_regression.ipynb), typed along through the straight-line and Gaussian-basis examples, skipping the evidence sections. Then steps 1–8 of my Bench worksheet, on a toy world: one bump at x = 0.7, seen through 20 Gaussian features with noise of standard deviation 0.1.
 
+The plots use Krasser's helper [`bayesian_linear_regression_util.py`](https://github.com/krasserm/bayesian-machine-learning/blob/dev/bayesian-linear-regression/bayesian_linear_regression_util.py), which isn't typed here. To run the notebook, save it as `reference/bayesian_linear_regression_util.py` next to the notebook.
+
 Credit: this unit follows Martin Krasser's notebook above, from his [bayesian-machine-learning](https://github.com/krasserm/bayesian-machine-learning) repo (Apache-2.0), which follows chapter 3 of Bishop's [*Pattern Recognition and Machine Learning*](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) (2006).
