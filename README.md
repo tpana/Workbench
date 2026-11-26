@@ -34,7 +34,7 @@ Each unit folder has a short README covering what I built and the sources I foll
 | 09 | **GPT tokenizer**: byte-level byte-pair encoding from scratch, trained on UTF-8 bytes with encode and decode, then GPT-2's regex pre-split and special tokens, checked against tiktoken's GPT-2 and GPT-4 tokenizers and compared with SentencePiece | A | Parked |
 | 10 | **Bayesian linear regression**: a posterior over the weights of 20 Gaussian basis features, built in one batch or one look at a time, as a map of a toy one-dimensional world: its mean, its uncertainty band, and a normalised surprise ε² that reads true noise over assumed noise | C | Done |
 | 11 | **Where to look, UCB**: the unit 10 map choosing its next look where μ + κσ is largest, scored by how many of 30 looks land on the object, against random, raster, greedy and uncertainty-only search and across a sweep of κ | B, C | Done |
-| 12 | **Forgetting**: exponential forgetting in the unit 10 map, decaying toward zero or toward the prior: γ as a memory of 1/(1 − γ) looks, how fast the map drops a bump that vanishes, and what forgetting costs when nothing changes | C | Planned |
+| 12 | **Forgetting**: exponential forgetting in the unit 10 map, decaying toward zero or toward the prior: γ as a memory of 1/(1 − γ) looks, how fast the map drops a bump that vanishes, and what forgetting costs when nothing changes | C | In progress |
 
 What's next: a GPT-2 reproduction that loads the real GPT-2 weights, PPO on CartPole, a predictive coding network beside a backprop twin, an HRR capacity curve, an enumerative program synthesizer for a grid DSL, and an LLM agent loop with no framework.
 
